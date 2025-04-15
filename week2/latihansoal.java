@@ -16,6 +16,8 @@ public class latihansoal {
         float diskonHarga = subTotalBeli*diskon ;
         float grandTotal = Math.round(subTotalBeli-diskonHarga);
 
+        System.out.println(nama);
+        System.out.println(produk);
         System.out.println(grandTotal);
     }
     
