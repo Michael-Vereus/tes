@@ -37,9 +37,6 @@ public class ipkskscounter {
             System.out.println("Masukkan nilai akhir mata kuliah " + nama_matkul[i]);
             nilai_akhir[i] = (0.3*nilai_uas[i]) + (0.3*nilai_uts[i]) + (0.4*nilai_tugas[i]);
         }
-        for (int i = 0; i < 8 ;i++){
-            System.out.println("Nilai akhir mata kuliah " + nama_matkul[i] + " anda adalah " + nilai_akhir[i]);
-        }
         for (int i = 0; i < 8 ; i++){
             if(nilai_akhir[i] <= 100 && nilai_akhir[i] >= 80){
                 bobot[i] = 4 ;
@@ -69,6 +66,9 @@ public class ipkskscounter {
                 bobot[i] = 1;
                 huruf[i] = "E";
             }
+        }
+        for (int i = 0; i < 8 ;i++){
+            System.out.println("Nilai akhir mata kuliah " + nama_matkul[i] + " anda adalah " + nilai_akhir[i]);
         }
         for (int i = 0; i < 8 ;i++){
             System.out.println("Ini nilai mata kuliah "+ nama_matkul[i] + " : " + huruf[i] + " , " + bobot[i]);
@@ -105,3 +105,5 @@ public class ipkskscounter {
         }
     }   
 }
+
+/*Author : Michael Vereus Limantara*/ 
