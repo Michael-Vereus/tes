@@ -1,0 +1,49 @@
+USE travelbiroweek11;
+
+-- BIROTRAVEL_240023
+INSERT INTO BIROTRAVEL_240023 (KODEBIRO, NAMA, ALAMAT, KOTA) VALUES
+('BR001', 'Travel Nusantara', 'Jl. Merdeka No.10', 'Jakarta'),
+('BR002', 'GoTrip', 'Jl. Sudirman No.5', 'Bandung'),
+('BR003', 'ExploreID', 'Jl. Malioboro No.21', 'Yogyakarta'),
+('BR004', 'Travel Hemat', 'Jl. Ciliwung No.1', 'Bogor'),
+('BR005', 'Jelajah Indonesia', 'Jl. Kalimantan No.99', 'Makassar');
+
+-- HOTEL_240023
+INSERT INTO HOTEL_240023 (KODE, NM_HOTEL, ALAMAT, KOTA) VALUES
+('HT001', 'Hotel Bintang Lima', 'Jl. Veteran No.1', 'Jakarta'),
+('HT002', 'Sunrise Hotel', 'Jl. Pantai Indah No.3', 'Bali'),
+('HT003', 'Mountain View Inn', 'Jl. Pegunungan No.8', 'Bandung'),
+('HT004', 'Beachside Resort', 'Jl. Laut Selatan No.7', 'Lombok'),
+('HT005', 'Skyline Hotel', 'Jl. Mega Kuningan No.11', 'Jakarta');
+
+-- KAMAR_240023
+INSERT INTO KAMAR_240023 (NOMOR_KAMAR, TIPE, HARGA, KODE) VALUES
+('K001', 'PRESIDENT', 2000000, 'HT001'),
+('K002', 'DELUXE', 1200000, 'HT001'),
+('K003', 'STANDARD', 800000, 'HT002'),
+('K004', 'DELUXE', 1000000, 'HT003'),
+('K005', 'STANDARD', 750000, 'HT004');
+
+-- TAMU_240023
+INSERT INTO TAMU_240023 (NOMOR_TAMU, NAMA, ALAMAT_TAMU, KOTA_ASAL_TAMU) VALUES
+('T001', 'Andi Santoso', 'Jl. Kenanga No.9', 'Surabaya'),
+('T002', 'Maria Yuliana', 'Jl. Cempaka No.3', 'Semarang'),
+('T003', 'Budi Gunawan', 'Jl. Dahlia No.5', 'Medan'),
+('T004', 'Rina Wulandari', 'Jl. Sakura No.2', 'Bogor'),
+('T005', 'Fajar Ramadhan', 'Jl. Teratai No.10', 'Palembang');
+
+-- MENYEWA_240023
+INSERT INTO MENYEWA (NOMOR_KAMAR, NOMOR_TAMU, TGL_MASUK, TGL_KELUAR) VALUES
+('K001', 'T001', '2025-06-01', '2025-06-05'),
+('K003', 'T002', '2025-06-03', '2025-06-06'),
+('K004', 'T003', '2025-06-02', '2025-06-04'),
+('K005', 'T004', '2025-06-06', '2025-06-09'),
+('K002', 'T005', '2025-06-07', '2025-06-10');
+
+-- MELAYANI_240023
+INSERT INTO MELAYANI (NOMOR_TAMU, KODEBIRO, TUJUAN, STATUS, BIAYA) VALUES
+('T001', 'BR001', 'Bali Tour', 'L', 1500000),
+('T002', 'BR002', 'Lombok Trip', 'T', 1200000),
+('T003', 'BR003', 'Yogyakarta Culture Tour', 'L', 1000000),
+('T004', 'BR004', 'Lombok Adventure', 'L', 1100000),
+('T005', 'BR005', 'Makassar Tour', 'T', 1300000);

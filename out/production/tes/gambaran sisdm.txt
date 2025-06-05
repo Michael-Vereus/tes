@@ -1,0 +1,54 @@
+====================
+1. BPMN: Mendistribusikan Dokumen Penilaian Kinerja Pegawai
+====================
+
+Pool: PDAM Surya Sembada
+Lane: Bagian Pengembangan Organisasi dan SDM
+  - Start Event: Permintaan Dokumen PK diterima
+  - Task: Menerima input berupa permintaan dokumen PK
+  - Task: Melakukan pengecekan atas permintaan dokumen PK
+  - Gateway: Permintaan sesuai Rencana Induk?
+    - No -> Task: Kembalikan ke tahap awal untuk dicek ulang -> End Event
+    - Yes -> Task: Memberi informasi dokumen ke Manajer Senior
+              -> Task: Mendapatkan persetujuan dan klarifikasi
+              -> Task: Menyiapkan dokumen PK
+              -> Task: Mendistribusikan dokumen ke Administrasi
+              -> Task: Mencatat hasil distribusi
+  - End Event: Dokumen PK berhasil didistribusikan
+
+
+====================
+2. BPMN: Melakukan Penilaian Kinerja Pegawai
+====================
+
+Pool: PDAM Surya Sembada
+Lane: Administrasi Departemen Terkait
+  - Start Event: Mulai penilaian
+  - Task: Mendistribusikan Dokumen PK ke pegawai
+
+Lane: Atasan Langsung (Penilai)
+  - Task: Mengisi Dokumen PK sesuai kinerja pegawai
+
+Lane: Pegawai yang Dinilai
+  - Task: Melakukan konseling dengan penilai
+  - Task: Melakukan ACC Dokumen PK Tahap 1
+  - Output: Dokumen PK ter-ACC Tahap 1
+
+Lane: Atasan Langsung (Penilai)
+  - Task: Melakukan ACC Dokumen PK Tahap 2
+  - End Event: Dokumen PK ter-ACC Tahap 2
+
+
+====================
+3. BPMN: Mengumpulkan Hasil Penilaian Kinerja Pegawai
+====================
+
+Pool: PDAM Surya Sembada
+Lane: Administrasi Departemen Terkait
+  - Start Event: Penilaian selesai dilakukan
+  - Task: Menyerahkan kembali Dokumen PK yang telah ter-ACC
+  - Output: Dokumen PK yang telah ter-ACC
+
+Lane: Bagian Pengembangan Organisasi dan SDM
+  - Task: Menerima kembali Dokumen PK yang telah ter-ACC
+  - End Event: Hasil penilaian diterima dan dicatat

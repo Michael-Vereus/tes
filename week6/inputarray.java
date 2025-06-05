@@ -19,14 +19,40 @@ public class inputarray {
             angka[i] = sc.nextDouble();
         }
         double max = Arrays.stream(angka).max().getAsDouble();
+        double max2 = angka[0];
+        double min2 = angka[0];
+        double jumlah = angka[0];
+        for (int i = 1; i < angka.length; i++){
+            if (angka[i] > max2){
+                max2 = angka[i];
+            }
+            if (angka[i] < min2){
+                min2 = angka[i];
+            }
+            jumlah = angka[i] + jumlah;
+        }
+        //dibawah ini untuk sort array
+        for (int i = 0; i < angka.length; i++){
+            for (int j = 0; j < angka.length; j++){
+                if (angka[i] < angka[j]){
+                    double temp = angka[j];
+                    angka[j] = angka[i];
+                    angka[i] = temp;
+                }
+            }
+        
+        }
+        for(int j = 0; j < n2 ;j++){
+            System.out.println(angka[j]);
+        }
+        double avg2 = jumlah/n;
+        System.out.println("Nilai max : " + max2);
+        System.out.println("Nilai min : " + min2);
+        System.out.println("Nilai Average : " + avg2);
         double min = Arrays.stream(angka).min().getAsDouble();
         double avg = Arrays.stream(angka).average().getAsDouble();
         System.out.println("Rata rata dalam array anda " + avg);
         System.out.println("Nilai maks dalam array : "+ max);
         System.out.println("Nilai min dalam array : " + min);
-        Arrays.sort(angka);
-        for(int i = 0; i < n2 ;i++){
-            System.out.println(angka[i]);
-        }
     }
 }
