@@ -1,4 +1,4 @@
-
+package week14.miniPos.src;
 import java.text.DecimalFormat;
 import java.util.*;
 class stock{
