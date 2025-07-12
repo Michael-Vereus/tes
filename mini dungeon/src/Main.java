@@ -1,6 +1,9 @@
 import java.util.*;
 
 abstract class Role{
+    protected ArrayList<Items> inventory = new ArrayList<>();
+    protected final int maxInventorySize = 5;
+    Scanner sc = new Scanner(System.in);
     protected String name;
     protected int hp;
     protected int defense;
@@ -15,6 +18,9 @@ abstract class Role{
     protected int changesAttDuration = 0;
     protected int changesDefDuration = 0;
     protected int changesSpeedDuration = 0;
+    //limit skill usage
+    protected int skillCooldown = 0;
+    protected final int skillCooldownDuration = 5;
 
     public Role(String name, int hp, int defense, int att, int speed){
         //baseHp
@@ -51,6 +57,74 @@ abstract class Role{
         System.out.println("DEF    : " + defense);
         System.out.println("SPD    : " + speed);
     }
+    public void addItem(Items items){
+        if (inventory.size() < maxInventorySize){
+            inventory.add(items);
+            System.out.println(items.getName() + " has been added to your inventory");
+        }
+        else {
+            System.out.println("Inventory full! You must discard something.");
+            showInventory();
+            removeItem(items);
+        }
+    }
+    public void showInventory(){
+        System.out.println("=== Inventory ===");
+        for (int i = 0; i < inventory.size(); i++) {
+            System.out.printf("%d. %s - %s\n", i + 1, inventory.get(i).getName(), inventory.get(i).getDesc());
+        }
+    }
+    public void removeItem(Items items){
+        boolean remove = true;
+        while (remove){
+            showInventory();
+            System.out.print("Select the Item Number : ");
+            String rm = sc.nextLine().trim();
+            int index = Integer.parseInt(rm) - 1;
+            try{
+                if(index >= 0 && index < inventory.size()){
+                    Items removed = inventory.remove(index);
+                    System.out.println(removed.getName() + " has been removed");
+                    remove = false;
+                }else {
+                    System.out.println("Wow bro what item are you talking about ?");
+                }
+            }
+            catch (NumberFormatException e){
+                System.out.println("Input Must be a NUMBER.");
+            }
+        }
+
+    }
+    public void useItem(){
+        if (inventory.isEmpty()) {
+            System.out.println("Your inventory is empty.");
+            return;
+        }
+        boolean using = true;
+        while (using){
+            System.out.println("Which item you want to use ? ( 0 to cancel ) : ");
+            String temp = sc.nextLine().trim();
+            int use = Integer.parseInt(temp) - 1;
+            try {
+                if(use < 0){
+                    using = false;
+                }else if (use >= 0 && use < inventory.size()){
+                    Items item = inventory.get(use);
+                    item.use(this);
+                    inventory.remove(use);
+                }else {
+                    System.out.println("Huh such items does not exist.");
+                }
+            }
+            catch (NumberFormatException e){
+                System.out.println("Input must be a NUMBER");
+            }
+
+        }
+
+    }
+
     //update for debuff or buff
     public void updateBuffStatus(){
         if(changesAttDuration > 0){
@@ -75,6 +149,20 @@ abstract class Role{
                 speed = baseSpeed;
                 System.out.println("Your Speed buff has worn off.");
             }
+        }
+    }
+    public void tryUseSkill(Enemy enemy) {
+        if (skillCooldown == 0) {
+            useSkill(enemy);
+            skillCooldown = skillCooldownDuration;
+        } else {
+            System.out.println("Skill is on cooldown for " + skillCooldown + " more turn(s).");
+        }
+    }
+    //for update cd
+    public void updateSkillCooldown() {
+        if (skillCooldown > 0) {
+            skillCooldown--;
         }
     }
 
@@ -149,7 +237,6 @@ abstract class Enemy{
         System.out.println("Enemy Att : " + enemyAtt);
     }
 }
-
 class Slime extends Enemy{
     public Slime(){
         super("Slime", 10,4,3);
@@ -185,6 +272,86 @@ class SkeletonArcher extends Enemy{
     }
 }
 
+
+abstract class Items{
+    protected String name;
+    protected String desc;
+
+    public Items(String name, String desc){
+        this.name = name;
+        this.desc = desc;
+    }
+
+    public String getName(){return name;}
+    public String getDesc(){return desc;}
+
+    public abstract void use(Role player);
+}
+
+class HealthPotion extends Items{
+    private int healAmount;
+
+    public HealthPotion(){
+        super("Health Potion", "Restores 10 HP");
+        this.healAmount = 10;
+    }
+    @Override
+    public void use(Role player) {
+        player.setHp(Math.min(player.getHp() + healAmount,20));
+        System.out.println("Health Restored : +" + healAmount );
+    }
+}
+
+class AttackElixir extends Items{
+
+    public AttackElixir(){
+        super("Attack Elixir", "+3 Attack");
+    }
+    public void use(Role player){
+        Random rng = new Random();
+        int attPlus = rng.nextInt(3) + 1;
+        player.setAtt(Math.min(player.getAtt() + attPlus , 10 ));
+        player.changesAttDuration = player.changesAttDuration + 2;
+    }
+}
+
+class RandomCube extends Items{
+    private int mysteryEfffect;
+
+    public RandomCube(){
+        super("Random Cube", "Whats in it? Spin the fate!");
+        this.mysteryEfffect = 3;
+    }
+
+    @Override
+    public void use(Role player) {
+        System.out.println("You Throw Da Cube.....");
+        Random rng = new Random();
+        int effect = rng.nextInt(6) + 1;
+        if(effect == 0){
+            player.setHp(Math.min(player.getHp() + mysteryEfffect,20));
+            System.out.println("Congrats your healed +" + mysteryEfffect);
+            System.out.println("Your HP is now : " + player.getHp());
+        } else if(effect == 1){
+            player.setDefense(player.getDefense() + mysteryEfffect);
+            player.changesDefDuration = 2;
+            System.out.println("Up Up Up Defense +" + mysteryEfffect);
+            System.out.println("Your Defense is now : " + player.getDefense());
+        } else if(effect == 2) {
+            player.setSpeed(player.getSpeed() + mysteryEfffect);
+            player.changesSpeedDuration = 2;
+            System.out.println("Up Up Up Speed +" + mysteryEfffect);
+            System.out.println("Your speed is now : " + player.getSpeed());
+        } else if(effect == 3){
+            player.setHp(Math.max(player.getHp() - mysteryEfffect,5 ));
+            System.out.println("Ouchhh the cube exploded -" + mysteryEfffect);
+            System.out.println("Your HP is now : " + player.getHp());
+        } else {
+            System.out.println("Huh? nothing happen");
+        }
+    }
+}
+
 class exploringHandler {
     Scanner sc ;
     public exploringHandler(Scanner sc){
@@ -199,8 +366,28 @@ class exploringHandler {
             Enemy enemy = generateEnemy();
             enemy.output();
             battleHandler(player, enemy);
+            pause();
         } else if(chance < 60){
             System.out.println("You found an Item!");
+            Items itemFound = generateItems();
+            System.out.println("Item Found: " + itemFound.getName());
+            System.out.println("Description: " + itemFound.getDesc());
+
+            while (true) {
+                System.out.print("Do you want to keep it ? (Y/n) : ");
+                String keep = sc.nextLine().trim();
+                if(keep.equalsIgnoreCase("Y")){
+                    player.addItem(itemFound);
+                    break;
+                }
+                else if (keep.equalsIgnoreCase("n")){
+                    System.out.println("You walked past it.");
+                    break;
+                } else {
+                    System.out.println("Huh ? re type it again.");
+                }
+            }
+            pause();
         } else if (chance < 80) {
             System.out.println("A magical fairy flies towards you...");
             Random perChance = new Random();
@@ -228,8 +415,10 @@ class exploringHandler {
                     System.out.println("Your Health is Fully Restored.");
                     break;
             }
+            pause();
         }else {
             System.out.println("You wander around and realize its and empty room. . . .");
+            pause();
         }
     }
     public Enemy generateEnemy(){
@@ -241,6 +430,20 @@ class exploringHandler {
             case 2 : return new SkeletonArcher();
             default: return new Slime();
         }
+    }
+    public Items generateItems(){
+        Random rng = new Random();
+        int itemName = rng.nextInt(1,5);
+        switch (itemName){
+            case 1 : return new HealthPotion();
+            case 2 : return new AttackElixir();
+            case 4 : return new RandomCube();
+            default: return new HealthPotion();
+        }
+    }
+    public void pause(){
+        System.out.println("Press Enter To Continue");
+        sc.nextLine();
     }
     public void battleHandler(Role player, Enemy enemy){
         System.out.println("Battle Start !");
@@ -258,9 +461,8 @@ class exploringHandler {
                 enemy.setEnemyHp(enemy.getEnemyHp()-damage);
                 System.out.println("You attacked and dealt " + damage + " damage");
             } else if (input.equals("2")) {
-                player.useSkill(enemy);
-            }
-            else if (input.equals("3")){
+                player.tryUseSkill(enemy);
+            } else if (input.equals("3")){
                 Random rng = new Random();
                 int esc = rng.nextInt(8);
                 if(player.getSpeed() > esc ){
@@ -278,7 +480,7 @@ class exploringHandler {
             System.out.println("\n== ENEMY TURN ==");
             Random rng = new Random();
             int choice = rng.nextInt(100);
-            if(choice <= 20){
+            if(choice <= 10){
                 enemy.deBuff(player);
             } else {
                 int enemyDamage = Math.max(enemy.getEnemyAtt() - player.getDefense(),1);
@@ -288,7 +490,7 @@ class exploringHandler {
 
             //update changes
             player.updateBuffStatus();
-
+            player.updateSkillCooldown();
             //status
             System.out.println("\n == STATUS ==");
             System.out.println("You: " + player.getHp() + " HP");
@@ -335,18 +537,19 @@ public class Main {
             menu();
             String opt = sc.nextLine().trim();
             exploringHandler explr = new exploringHandler(sc);
-            switch (opt){
+            String OPT = opt.toUpperCase();
+            switch (OPT){
                 case "A" :
                     explr.explore(player);
                     break;
                 case "B" :
-
+                    player.showInventory();
+                    player.useItem();
                     break;
                 case "C" :
                     exploring = exit();
                     break;
             }
-            pause();
         }
     }
     /// menu
@@ -360,12 +563,6 @@ public class Main {
     public static void pause(){
         System.out.println("Press Enter To Continue");
         String cntn = sc.nextLine();
-
-        if(cntn.equals("")){
-
-        }else {
-
-        }
     }
     ///  Exit
     public static boolean exit(){
@@ -387,4 +584,4 @@ public class Main {
     }
 }
 
-/// note : resolve bug dimana ketika setelah membunuh musuh stat musuh tidak kembali seperti semula
+///
