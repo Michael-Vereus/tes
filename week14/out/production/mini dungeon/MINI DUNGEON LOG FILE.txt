@@ -1,0 +1,6 @@
+mini dungeon in progress : 
+- battle (done)
+- explore (done)
+- debuff and buff (done)
+- item system (not yet)
+- use item (not yet
