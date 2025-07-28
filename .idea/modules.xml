@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/beforeUAS/beforeUAS.iml" filepath="$PROJECT_DIR$/beforeUAS/beforeUAS.iml" />
       <module fileurl="file://$PROJECT_DIR$/tes.iml" filepath="$PROJECT_DIR$/tes.iml" />
     </modules>
   </component>

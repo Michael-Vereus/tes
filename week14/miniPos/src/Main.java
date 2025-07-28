@@ -108,7 +108,7 @@ class StockManager{
             System.out.println("Input must be a Number.\n");
         }
     }
-    public   void checkStock() {
+    public void checkStock() {
         System.out.println("\n===== List of Stocks =====");
         System.out.printf("%-4s %-15s %-10s %-10s\n", "No", "Name", "Quantity", "Price");
         System.out.println("-------------------------------------------------------------");
