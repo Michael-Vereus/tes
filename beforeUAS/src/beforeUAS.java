@@ -154,7 +154,6 @@ class stockHandler{
                 System.out.println("Input harus angka.");
             }
         }
-
         double total = jumlah * selected.getStockPrice();
         selected.setStockQuantity(selected.getStockQuantity() - jumlah);
         grandTotal += total;
@@ -163,7 +162,6 @@ class stockHandler{
         transaksiHariIni.add(log);
         System.out.println("Transaksi dicatat: " + log);
     }
-
     public void showGrandTotal() {
         System.out.println("\n===== TRANSAKSI HARI INI =====");
         for (String transaksi : transaksiHariIni) {
@@ -184,22 +182,23 @@ public class beforeUAS {
             String input = sc.nextLine().trim();
             switch (input){
                 case "1":
-                    sh.addStock(); pause();break;
+                    sh.addStock(); break;
                 case "2":
-                    sh.viewStocks(); pause();break;
+                    sh.viewStocks(); break;
                 case "3":
-                    sh.searchStock(); pause();break;
+                    sh.searchStock(); break;
                 case "4":
-                    sh.removeStock(); pause();break;
+                    sh.removeStock(); break;
                 case "5":
-                    sh.buyStock(); pause();break;
+                    sh.buyStock(); break;
                 case "6":
-                    sh.showGrandTotal(); pause();break;
+                    sh.showGrandTotal(); break;
                 case "0":
                     System.out.println("BYE 404");
                     running = false;
                     break;
             }
+            pause(running);
         }
     }
     public static void menu(){
@@ -212,8 +211,13 @@ public class beforeUAS {
         System.out.println("6. Total Transactions");
         System.out.println("0. Exit");
     }
-    public static void pause(){
-        System.out.println("Press Enter To Continue");
-        String resume = sc.nextLine();
+    public static void pause(boolean running){
+        if(running == true){
+
+        }
+        else {
+            System.out.println("Press Enter To Continue");
+            String resume = sc.nextLine();
+        }
     }
 }
